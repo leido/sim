@@ -49,9 +49,8 @@ trunk serve --open
 
 ## Demo
 
-访问在线演示：[https://username.github.io/your-repo-name/](https://username.github.io/your-repo-name/)
+访问在线演示：[https://leido.github.io/sim/](https://leido.github.io/sim/)
 
-*替换 `username` 和 `your-repo-name` 为你的实际值*
 
 ## 开发
 
@@ -73,21 +72,6 @@ sim/
 ├── index.scss            # 样式文件
 ├── Cargo.toml            # Rust 依赖配置
 └── Trunk.toml            # Trunk 配置
-```
-
-### 添加依赖
-
-```bash
-cargo add dependency_name
-```
-
-### 调试
-
-启用 WASM 日志：
-
-```javascript
-// 在浏览器控制台中
-localStorage.setItem('RUST_LOG', 'debug');
 ```
 
 ## 许可证
