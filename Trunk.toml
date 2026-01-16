@@ -1,0 +1,4 @@
+[profile.release]
+# 优化级别（z = 最大优化，s = 最小体积）
+wasm-opt = ["-Oz", "--enable-bulk-memory"]
+

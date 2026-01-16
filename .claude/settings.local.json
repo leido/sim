@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(trunk build:*)",
+      "Bash(taskkill:*)",
+      "Bash(cargo build:*)",
+      "Bash(cargo check:*)"
+    ]
+  }
+}

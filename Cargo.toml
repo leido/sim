@@ -1,0 +1,22 @@
+[package]
+name = "sim"
+version = "0.1.0"
+edition = "2024"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bevy = { version = "0.17.3", features = ["dynamic_linking", "mp3"] }
+avian3d = { version = "0.4.1", features = ["bevy_diagnostic", "diagnostic_ui"] }
+bevy_panorbit_camera = { version = "0.33.0", features = ["bevy_egui"] }
+bevy_egui = "0.38.1"
+wasm-bindgen = "0.2.106"
+console_error_panic_hook = "0.1"
+
+# Enable a small amount of optimization in debug mode
+[profile.dev]
+opt-level = 1
+
+# Enable high optimizations for dependencies (incl. Bevy), but not for our code:
+[profile.dev.package."*"]
+opt-level = 3
