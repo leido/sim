@@ -28,6 +28,8 @@ jobs:
       - name: Install wasm32 target
         run: rustup target add wasm32-unknown-unknown
 
+      - uses: cargo-bins/cargo-binstall@main
+
       - name: Install Trunk
         run: cargo binstall trunk
 
