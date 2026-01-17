@@ -10,5 +10,26 @@
   <body>
     <canvas id="wasm-canvas"></canvas>
 
+    <script>
+      // Activate audio context on first user interaction
+      let audioActivated = false;
+      function activateAudio() {
+        if (!audioActivated) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            const ctx = new AudioContext();
+            ctx.resume().then(() => {
+              console.log("Audio context activated");
+              audioActivated = true;
+            });
+          }
+        }
+      }
+
+      // Listen for user interaction
+      document.addEventListener('keydown', activateAudio);
+      document.addEventListener('click', activateAudio);
+      document.addEventListener('touchstart', activateAudio);
+    </script>
   </body>
 </html>
