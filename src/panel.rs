@@ -197,7 +197,7 @@ fn toggle_debug_panel(mut debug_panel: ResMut<DebugPanelVisible>, key: Res<Butto
 }
 
 fn toggle_help_menu(mut help_menu: ResMut<HelpMenuVisible>, key: Res<ButtonInput<KeyCode>>) {
-    if key.just_pressed(KeyCode::F1) || key.just_pressed(KeyCode::Slash) {
+    if key.just_pressed(KeyCode::F1) {
         help_menu.0 = !help_menu.0;
     }
 }
@@ -215,9 +215,8 @@ fn update_debug_panel(
 
     // Show help menu
     if help_menu.0 {
-        egui::Window::new("Keyboard Shortcuts")
-            .resizable(true)
-            .default_width(400.0)
+        egui::Area::new(egui::Id::new("help_menu"))
+            .anchor(egui::Align2::LEFT_BOTTOM, egui::Vec2::new(0.0, -10.0))
             .show(ctx, |ui| {
                 draw_help_menu(ui);
             });
@@ -297,17 +296,19 @@ fn draw_basic_info(
         ui.add_space(5.0);
         ui.label("Camera Mode:");
 
-        // Rebind to get mutable reference to the inner value
-        let mode = camera_mode.as_mut();
-        ui.radio_value(mode, CameraMode::FirstPersonView, "First Person");
-        ui.radio_value(mode, CameraMode::ThirdPersonView, "Third Person");
-        ui.radio_value(mode, CameraMode::OverShoulderView, "Over Shoulder");
+        // Use local variable to detect actual changes
+        let mut current_mode = (*camera_mode).clone();
+        ui.radio_value(&mut current_mode, CameraMode::ThirdPersonView, "Third Person");
+        ui.radio_value(&mut current_mode, CameraMode::FirstPersonView, "First Person");
+        ui.radio_value(&mut current_mode, CameraMode::OverShoulderView, "Over Shoulder");
+
+        // Only write to resource if value actually changed
+        if current_mode != *camera_mode {
+            *camera_mode = current_mode;
+        }
 
         ui.add_space(5.0);
-        ui.label(egui::RichText::new("[F1 or /] Help")
-            .italics()
-            .small()
-            .color(egui::Color32::GRAY));
+        ui.label("Press F1 for Help Menu");
     });
 }
 
@@ -435,17 +436,14 @@ fn draw_help_menu(ui: &mut egui::Ui) {
             ui.label(egui::RichText::new("H").strong().color(egui::Color32::YELLOW));
             ui.label(": Cycle Camera Mode");
         });
-        ui.label("  First Person → Third Person → Over Shoulder");
         ui.horizontal(|ui| {
             ui.label(egui::RichText::new("I / K").strong().color(egui::Color32::YELLOW));
             ui.label(": Pitch Up / Down");
         });
-        ui.label("  Third Person View Only");
         ui.horizontal(|ui| {
             ui.label(egui::RichText::new("J / L").strong().color(egui::Color32::YELLOW));
             ui.label(": Yaw Left / Right");
         });
-        ui.label("  Third Person View Only");
 
         ui.add_space(10.0);
 
@@ -456,7 +454,7 @@ fn draw_help_menu(ui: &mut egui::Ui) {
             ui.label(": Toggle Debug Panel");
         });
         ui.horizontal(|ui| {
-            ui.label(egui::RichText::new("F1 / /").strong().color(egui::Color32::YELLOW));
+            ui.label(egui::RichText::new("F1").strong().color(egui::Color32::YELLOW));
             ui.label(": Toggle Help Menu");
         });
 

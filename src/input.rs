@@ -1,7 +1,6 @@
 use bevy::prelude::*;
 use bevy_panorbit_camera::PanOrbitCamera;
 
-use crate::camera::CameraMode;
 use crate::car_dynamics::{Car, EgoControl, EgoState, MAX_STEERING_ANGLE, STEER_RATIO};
 use crate::utils::normalize_angle;
 
@@ -85,7 +84,6 @@ fn keyboard_system(
     mut query: Single<&mut EgoControl, With<Car>>,
     ego_state: Single<&EgoState, With<Car>>,
     mut camera: Single<&mut PanOrbitCamera>,
-    camera_mode: Res<CameraMode>,
     time: Res<Time>,
 ) {
     if key.pressed(KeyCode::KeyW) {
@@ -109,9 +107,6 @@ fn keyboard_system(
             -1.0,
             time.delta_secs(),
         );
-    }
-    if *camera_mode != CameraMode::ThirdPersonView {
-        return;
     }
     if key.pressed(KeyCode::KeyJ) {
         camera.target_yaw = normalize_angle(camera.yaw.unwrap() + time.delta_secs() * PI);
